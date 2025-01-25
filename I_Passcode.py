@@ -1,9 +1,8 @@
 from adafruit_rgb_display.rgb import color565 # type: ignore
-from adafruit_rgb_display.ili9341 import ILI9341
-
-from busio import SPI
-from digitalio import DigitalInOut
-import board
+from adafruit_rgb_display.ili9341 import ILI9341 # type: ignore
+from busio import SPI # type: ignore
+from digitalio import DigitalInOut # type: ignore
+import board # type: ignore
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -29,30 +28,24 @@ def passcode (passcode1,passcode2):
     IMAGE_SIZE = (disp.height, disp.width)
 
     # Define fonts
-    FONT_ROBOTO = ImageFont.truetype("Roboto-Medium.ttf", 15)
-    FONT_NOTO = ImageFont.truetype("NotoSansCJK-Regular.ttc", 28)
-    FONT_NOTO_SMALL = ImageFont.truetype("NotoSansCJK-Regular.ttc", 20)
+    FONT_NOTO = ImageFont.truetype("NotoSansCJK-Regular.ttc", 25)
+    FONT_NOTO_SMALL = ImageFont.truetype("NotoSansCJK-Regular.ttc", 16)
+    FONT_NOTO_S = ImageFont.truetype("NotoSansCJK-Regular.ttc", 15)
+    FONT_SMALL = ImageFont.truetype("NotoSansCJK-Regular.ttc", 15)
 
     # Define colors
     COLOR_WHITE = (236, 239, 241)
     COLOR_PURPLE = (239, 154, 154)
+    COLOR_RED = (71, 131, 132)
 
     # Create an image with black background
     image = Image.new("RGB", IMAGE_SIZE, (0, 0, 0))
 
     # Draw some text
     draw = ImageDraw.Draw(image)
-    text = f"""\
-
-
-    解錠用パスコードです。
-
-    {str(passcode1)} or {str(passcode2)}"""
-
-    for i, line in enumerate(text.split("\n")):
-        draw.text((0, 24*i), line, font=FONT_NOTO, fill=COLOR_WHITE)
-
-    draw.text((40, 200), "縣陵探究ラボ \n", font=FONT_NOTO_SMALL, fill=COLOR_PURPLE)
-
+    draw.text((20,20),f"解錠用パスコードです。\n{str(passcode2)}",font=FONT_NOTO, fill=COLOR_WHITE)
+    draw.text((20,100),"※アプリにコードを入力してください。",font=FONT_SMALL, fill=COLOR_RED)
+    draw.text((30, 170), "link : https://kenryolab.vercel.app/", font=FONT_NOTO_S, fill=COLOR_PURPLE)
+    draw.text((20, 200), "KENRYO STEAM LAB. \n", font=FONT_NOTO_SMALL, fill=COLOR_PURPLE)
     # Show it on display
     disp.image(image)
