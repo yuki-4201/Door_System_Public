@@ -40,8 +40,6 @@ def handle_broadcast(data):
         print(str(dt_now) +f"*** 不明なイベントを受信しました:{data}")
         #sys.stdout = sys.__stdout__
 
-
-
 #クライアントからのメッセージを受信する
 async def listenToBloadcastMessages():
     client = AsyncRealtimeClient(url, key)
