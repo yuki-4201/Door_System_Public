@@ -27,7 +27,10 @@ dt_format_string = dt_now.strftime('%Y-%m-%d %H:%M:%S')
 if 1+1 == 2:
 	title="DoorAleart.jpeg"
 	cv2.imwrite(title, frame)
-	print(title + "\n")
+	print(title)
+	img = cv2.imread('DoorAleart.jpeg')
+	img_rotate_180 = cv2.rotate(img, cv2.ROTATE_180)
+	cv2.imwrite(title, img_rotate_180)
 
 	#メッセージの詳細
 	username = A_Setting.username
@@ -47,14 +50,9 @@ if 1+1 == 2:
 			webhookdata = Webhook.from_url(webhook_url, session=session)
 			await webhookdata.send(username=username, embed=embed, file=file)
 	asyncio.run(foo())
-
 	count_number +=1
-
 	key = cv2.waitKey(1)
 
-
-
 count_number -=1
-
 camera.release()
 cv2.destroyAllWindows()
