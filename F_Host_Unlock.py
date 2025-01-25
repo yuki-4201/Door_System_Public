@@ -33,7 +33,6 @@ def changePassCodes():
     print(f"新しいパスコードが生成されました:{passCode2}")
     I_Passcode.passcode(passCode1,passCode2)
 
-
 #ブロードキャストを受信したときの処理
 def handle_broadcast(data):
     dt_now = datetime.datetime.now()
@@ -42,6 +41,7 @@ def handle_broadcast(data):
     if "event" in data and data["event"] == eventName:
         code = data["payload"]
         user = data["user"]
+        group = data["group"]
         print(str(dt_now) +f'\t パスコード受信：{code}')
 
         #パスコードが一致しているか確認
@@ -51,13 +51,13 @@ def handle_broadcast(data):
 
             if nowtime >= Systemstart and nowtime <= Systemend:
                 #解錠処理
-                H_Unlock.unlock("student")
+                H_Unlock.unlock(user)
             else:
                 print("時間外労働はお断りします")
 
-        elif user == "teacher":
+        elif group == "teacher":
             print("特別措置")
-            H_Unlock.unlock("user")
+            H_Unlock.unlock(user)
 
         else:
             print("*** パスコードが一致しません")
