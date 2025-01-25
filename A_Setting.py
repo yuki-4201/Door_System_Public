@@ -2,16 +2,14 @@ import datetime
 from supabase import create_client
 
 #Supabaseのリンク
-PROJECT_URL = Supabase_URL
-API_KEY = Supabase_API_Key
-
+PROJECT_URL = URL
+API_KEY = KEY
 supabase = create_client(PROJECT_URL, API_KEY)
 
 #supabaseの設定情報を入力したテーブルを取得
 settingdata = supabase.table("setting").select("*").execute()
 data ,_= settingdata
 settinglist = { d['Item_name']:d for d in data[1]}
-#print(A_settinglist)
 
 #DiscordのWebhook URL
 webhook_url = settinglist['webhook_url']['1']
@@ -26,6 +24,9 @@ username = settinglist['username']['1']
 #認証失敗時のメッセージ
 description1 = settinglist['description1']['1']
 
+#tablename
+listname1, listname2 = settinglist['listname']['1'], settinglist['listname']['2']
+
 #動体検知に引っかかったときのメッセージ
 description2 = settinglist['description2']['1']
 color_hex = settinglist['color_hex']['1']
@@ -34,5 +35,3 @@ color_hex = settinglist['color_hex']['1']
 login_database_URL = settinglist['supabase_Authentication']['1']
 login_database_Key = settinglist['supabase_Authentication']['2']
 host_url = settinglist['host_url']['1']
-
-
