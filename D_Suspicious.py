@@ -2,9 +2,11 @@ import discord # type: ignore
 import aiohttp
 import asyncio
 import datetime
+import cv2 # type: ignore
 import cv2 as cv # type: ignore
 from discord import Webhook # type: ignore
 import A_Setting
+import G_Lock
 
 #discordのwebhookのURL
 webhook_url = A_Setting.webhook_url
@@ -25,9 +27,13 @@ avg = None
 #現在の時刻を取得
 dt_now = datetime.datetime.now()
 now = dt_now.time()
-
+count = 0
 
 while now < start or now >end:
+	if count == 0:
+		G_Lock.lock("定時操作")
+		print("定時操作")
+		count = 1
 	#現在の時刻の更新
 	dt_now = datetime.datetime.now()
 	#sys.stdout = open("_System.log", "a")
@@ -66,6 +72,9 @@ while now < start or now >end:
 	if motion_detected  == True:
 		title="DoorAleart.jpeg"
 		cv.imwrite(title, frame)
+		img = cv2.imread('DoorAleart.jpeg')
+		img_rotate_180 = cv2.rotate(img, cv2.ROTATE_180)
+		cv2.imwrite(title, img_rotate_180)
 		print(title)
 		dt_now = datetime.datetime.now()
 
@@ -95,6 +104,6 @@ while now < start or now >end:
 	if key == 27:
 		break
 
-
+count = 0
 camera.release()
 cv.destroyAllWindows()
