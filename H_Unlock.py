@@ -24,11 +24,11 @@ def afrer(n, started):
 def unlock(user):
 	#sys.stdout = open("_Application_Unlock.log", "a")
 	#データベースのテーブル名を取得
-	listname3 = A_Setting.listname3
-	listname4 = A_Setting.listname4
+	listname1 = A_Setting.listname1
+	listname2 = A_Setting.listname2
 
-	#ドアの状態を取得
-	Door_Log_datalist = supabase.table(listname3).select("*").execute()
+	#ドアの状態を取
+	Door_Log_datalist = supabase.table(listname1).select("*").execute()
 	Door_list=[f"{user['door']}" for user in Door_Log_datalist.data]
 	Door_list= [s for s in Door_list if s != '操作なし']
 	Door_condition = (Door_list[0])
@@ -45,9 +45,8 @@ def unlock(user):
 
 	#ログを記録
 	message_log =  "認証済"
-	UserName = user + "_Application"
-	logdata = {"username": UserName,"certification": message_log, "door":message_door }
-	supabase.table(listname4).insert(logdata).execute()
+	logdata = {"username": user,"certification": message_log, "door":message_door }
+	supabase.table(listname2).insert(logdata).execute()
 	return True
 	#sys.stdout = sys.__stdout__
 
