@@ -25,11 +25,11 @@ def afrer(n, started):
 def lock(user):
 	#sys.stdout = open("_Application_Lock.log", "a")
 	#データベースのテーブル名を取得
-	listname3 = A_Setting.listname3
-	listname4 = A_Setting.listname4
+	listname1 = A_Setting.listname1
+	listname2 = A_Setting.listname2
 
 	#ドアの状態を取得
-	Door_Log_datalist = supabase.table(listname3).select("*").execute()
+	Door_Log_datalist = supabase.table(listname1).select("*").execute()
 	Door_list=[f"{user['door']}" for user in Door_Log_datalist.data]
 	Door_list= [s for s in Door_list if s != '操作なし']
 	Door_condition = (Door_list[0])
@@ -39,16 +39,18 @@ def lock(user):
 		set_angle (95)
 		message_door="施錠"
 		print ("認証されたユーザーです。ドアを施錠します。\n")
-
+	elif user == "定時操作":
+		set_angle (95)
+		message_door="施錠"
+		print ("定時操作を行います。\n")
 	else:
 		print ("認証されたユーザーです。ドアは施錠されているため追加の操作を行いません。\n")
 		message_door="操作なし"
 
 	#ログを記録
 	message_log =  "認証済"
-	UserName = user + "_Application"
-	logdata = {"username": UserName,"certification": message_log, "door":message_door }
-	supabase.table(listname4).insert(logdata).execute()
+	logdata = {"username": user,"certification": message_log, "door":message_door }
+	supabase.table(listname2).insert(logdata).execute()
 
 	return True
 	#sys.stdout = sys.__stdout__
