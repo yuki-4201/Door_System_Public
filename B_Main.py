@@ -1,8 +1,9 @@
-import datetime
-import subprocess
-from supabase import create_client
+import datetime # type: ignore
+import subprocess # type: ignore
+from supabase import create_client # type: ignore
+
 import A_Setting
-import D_Suspicious # type: ignore
+import D_Suspicious
 
 #動体検知システムを作動させない時間帯の設定
 Systemstart = A_Setting.Systemstart
@@ -18,3 +19,4 @@ while True:
         #動体検知システムを作動
         proc = subprocess.Popen(D_Suspicious)
         proc.communicate
+

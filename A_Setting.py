@@ -1,9 +1,14 @@
 import datetime
-from supabase import create_client
+import os
+from dotenv import load_dotenv # type: ignore
+from supabase import create_client # type: ignore
 
-#Supabaseのリンク
-PROJECT_URL = URL
-API_KEY = KEY
+# .env ファイルをロード
+load_dotenv()
+
+# Supabaseのリンク
+PROJECT_URL = os.getenv("PROJECT_URL")
+API_KEY = os.getenv("API_KEY")
 supabase = create_client(PROJECT_URL, API_KEY)
 
 #supabaseの設定情報を入力したテーブルを取得
@@ -35,3 +40,14 @@ color_hex = settinglist['color_hex']['1']
 login_database_URL = settinglist['supabase_Authentication']['1']
 login_database_Key = settinglist['supabase_Authentication']['2']
 host_url = settinglist['host_url']['1']
+
+#メールの設定
+SELF_MAIL_ADDRESS = settinglist['email_setting']['1']
+SELF_MAIL_PASSWORD = settinglist['email_setting']['2']
+mail_to01, mail_to02, mail_to03 = settinglist['mail_to']['1'], settinglist['mail_to']['2'], settinglist['mail_to']['3']
+mail_to = [mail_to01, mail_to02, mail_to03]
+mail_to.remove(None)
+
+#機能の指定(mail or discord)
+select_function = settinglist['email_setting']['3']
+

@@ -1,89 +1,55 @@
-import asyncio
-import datetime
-from random import randint
-from realtime import AsyncRealtimeClient
-import A_Setting
-import H_Unlock
-import I_Passcode
+import asyncio # type: ignore
+import datetime # type: ignore
+from random import randint # type: ignore
+from realtime import AsyncRealtimeClient # type: ignore
 
-#Supabaseの設定
+import A_Setting
+import G_Lock
+
+# イベントを受信するための設定
 url = A_Setting.host_url
 key = A_Setting.login_database_Key
 
-#ブロードキャストの設定
-eventName = "RequestForUnlocking"
+# イベント名とチャンネル名
+eventName = "RequestForLocking"
 channelName = "admin"
 
-Systemstart = A_Setting.Systemstart
-Systemend = A_Setting.Systemend
-
-#パスコードの設定
-newPassCodeInterval = 20
-passCode1, passCode2 = None, None
-
-#パスコードを生成する
-def randomPassCode():
-    return str(randint(1000, 8999))
-
-#パスコードを変更する(直近2つを保持)
-def changePassCodes():
-    global passCode1, passCode2
-    passCode1 = passCode2
-    passCode2 = randomPassCode()
-    print(f"新しいパスコードが生成されました:{passCode2}")
-    I_Passcode.passcode(passCode1,passCode2)
-
-#ブロードキャストを受信したときの処理
+# イベントを受信したときの処理
 def handle_broadcast(data):
     dt_now = datetime.datetime.now()
 
-    #イベント名が一致しているか確認
+    # イベント名が一致しているか確認
     if "event" in data and data["event"] == eventName:
         code = data["payload"]
         user = data["user"]
-        group = data["group"]
-        print(str(dt_now) +f'\t パスコード受信：{code}')
 
-        #パスコードが一致しているか確認
-        if code and code == passCode1 or code == passCode2:
-            dt_now = datetime.datetime.now()
-            nowtime = dt_now.time()
+        # 正規の操作であるかの確認
+        if code and code == 424242:
+            print(str(dt_now) + "施錠命令受信:施錠します" + user)
 
-            if nowtime >= Systemstart and nowtime <= Systemend:
-                #解錠処理
-                H_Unlock.unlock(user)
-            else:
-                print("時間外労働はお断りします")
+            # 施錠処理
+            G_Lock.lock("user")
 
-        elif group == "teacher":
-            print("特別措置")
-            H_Unlock.unlock(user)
-
+        # 正規の操作でない場合は操作を行わない
         else:
-            print("*** パスコードが一致しません")
+            print(str(dt_now) +"施錠失敗")
 
+    # イベント名が一致しない場合操作を行わない
     else:
         print(str(dt_now) +f"*** 不明なイベントを受信しました:{data}")
 
-#新しいパスコードを生成する
-async def generatePassCodeContinuously():
-    while True:
-        changePassCodes()
-        await asyncio.sleep(newPassCodeInterval)
-
-#クライアントからのメッセージを受信する
-async def listenToBoadcasMessages():
+# クライアントからのメッセージを受信する
+async def listenToBloadcastMessages():
     client = AsyncRealtimeClient(url, key)
     await client.connect()
     channel = client.channel(channelName)
     await channel.on_broadcast(eventName , handle_broadcast).subscribe()
     await client.listen()
 
-#メイン処理
+# メイン関数
 if __name__ == "__main__":
-    changePassCodes()
     loop = asyncio.get_event_loop()
-    tasks = [generatePassCodeContinuously(), listenToBoadcasMessages()]
+    tasks = [listenToBloadcastMessages()]
     try:
         loop.run_until_complete(asyncio.gather(*tasks))
     finally:
