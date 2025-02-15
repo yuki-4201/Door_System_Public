@@ -5,7 +5,9 @@ from busio import SPI # type: ignore
 from digitalio import DigitalInOut # type: ignore
 from PIL import Image, ImageDraw, ImageFont # type: ignore
 
+
 def passcode (passcode1,passcode2):
+
     # ピン番号の設定
     cs_pin = DigitalInOut(board.D8)
     dc_pin = DigitalInOut(board.D25)

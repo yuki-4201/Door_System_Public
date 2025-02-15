@@ -13,6 +13,7 @@ from email.utils import formatdate
 
 import A_Setting
 
+
 # 定数の定義
 SELF_MAIL_ADDRESS = A_Setting.SELF_MAIL_ADDRESS
 SELF_MAIL_PASSWORD = A_Setting.SELF_MAIL_PASSWORD
@@ -26,6 +27,7 @@ webhook_url = A_Setting.webhook_url
 select_function = A_Setting.select_function
 
 count = 0
+
 
 # 通知メールを生成する関数
 def create_mail(mail_subject, mail_body, mail_from, mail_to, attach_filename = None):
@@ -62,6 +64,7 @@ def create_mail(mail_subject, mail_body, mail_from, mail_to, attach_filename = N
 
     return mail_message
 
+
 # メールの操作心を行う関数
 def send_mail(mail_message, mail_to):
     try:
@@ -76,6 +79,7 @@ def send_mail(mail_message, mail_to):
         print(f'Error:{e}')
     finally:
         smtp.quit()
+
 
 #カメラで撮影
 camera = cv2.VideoCapture(0)
@@ -162,6 +166,7 @@ if 1+1 == 2:
     count_number +=1
     key = cv2.waitKey(1)
     count = 0
+
 
 count_number -=1
 camera.release()

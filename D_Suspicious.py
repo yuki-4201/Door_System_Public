@@ -13,7 +13,8 @@ from email.mime.text import MIMEText
 from email.utils import formatdate
 
 import A_Setting
-import G_Lock
+import G_Servo
+
 
 # メールの送信設定
 SELF_MAIL_ADDRESS = A_Setting.SELF_MAIL_ADDRESS
@@ -51,6 +52,7 @@ dt_now = datetime.datetime.now()
 now = dt_now.time()
 count = 0
 
+
 # 通知メールを生成する関数
 def create_mail(mail_subject, mail_body, mail_from, mail_to, attach_filename = None):
     # 添付ファイル名の指定有無により切り分け
@@ -86,6 +88,7 @@ def create_mail(mail_subject, mail_body, mail_from, mail_to, attach_filename = N
 
     return mail_message
 
+
 # メールの操作心を行う関数
 def send_mail(mail_message, mail_to):
     try:
@@ -101,10 +104,11 @@ def send_mail(mail_message, mail_to):
     finally:
         smtp.quit()
 
+
 # 事前に設定された時間内のみ不審者通知を行う
 while now < start or now >end:
 	if count == 0:
-		G_Lock.lock("定時操作")
+		G_Servo.lock("定時操作")
 		print("定時操作")
 		count = 1
 
@@ -210,6 +214,7 @@ while now < start or now >end:
 	# ESCキーが押されたら終了する
 	if key == 27:
 		break
+
 
 count = 0
 camera.release()

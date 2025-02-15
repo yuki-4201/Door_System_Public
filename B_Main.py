@@ -5,9 +5,11 @@ from supabase import create_client # type: ignore
 import A_Setting
 import D_Suspicious
 
+
 #動体検知システムを作動させない時間帯の設定
 Systemstart = A_Setting.Systemstart
 Systemend = A_Setting.Systemend
+
 
 while True:
     #現在時刻の取得
