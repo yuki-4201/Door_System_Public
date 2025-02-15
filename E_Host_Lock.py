@@ -4,7 +4,8 @@ from random import randint # type: ignore
 from realtime import AsyncRealtimeClient # type: ignore
 
 import A_Setting
-import G_Lock
+import G_Servo
+
 
 # イベントを受信するための設定
 url = A_Setting.host_url
@@ -13,6 +14,7 @@ key = A_Setting.login_database_Key
 # イベント名とチャンネル名
 eventName = "RequestForLocking"
 channelName = "admin"
+
 
 # イベントを受信したときの処理
 def handle_broadcast(data):
@@ -28,7 +30,7 @@ def handle_broadcast(data):
             print(str(dt_now) + "施錠命令受信:施錠します" + user)
 
             # 施錠処理
-            G_Lock.lock("user")
+            G_Servo.lock("user")
 
         # 正規の操作でない場合は操作を行わない
         else:
@@ -38,6 +40,7 @@ def handle_broadcast(data):
     else:
         print(str(dt_now) +f"*** 不明なイベントを受信しました:{data}")
 
+
 # クライアントからのメッセージを受信する
 async def listenToBloadcastMessages():
     client = AsyncRealtimeClient(url, key)
@@ -45,6 +48,7 @@ async def listenToBloadcastMessages():
     channel = client.channel(channelName)
     await channel.on_broadcast(eventName , handle_broadcast).subscribe()
     await client.listen()
+
 
 # メイン関数
 if __name__ == "__main__":
