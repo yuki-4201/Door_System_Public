@@ -42,7 +42,7 @@ pip install supabase
 ```
 * プロジェクトのクローン
 ```
-git clone git@github.com:yuki-4201/door_system_Public.git
+git clone git@github.com:yuki-4201/Door_System_Public.git
 ```
 ※自動実行などについては各自で調べて設定してください。
 
